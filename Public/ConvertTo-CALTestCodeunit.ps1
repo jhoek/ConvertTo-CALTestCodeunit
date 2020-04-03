@@ -77,6 +77,9 @@ function Get-ElementFunctionName
     switch ($true)
     {
         ($Element -is [Given]) { Get-SanitizedName -Name ($GivenFunctionName -f $Element.Value) }
+        ($Element -is [When]) { Get-SanitizedName -Name ($WhenFunctionName -f $Element.Value) }
+        ($Element -is [Then]) { Get-SanitizedName -Name ($ThenFunctionName -f $Element.Value) }
+        default { Get-SanitizedName -Name $Element.Value }
     }
 }
 
@@ -90,7 +93,7 @@ $ScenarioCache `
 | Select-Object -ExpandProperty Elements `
 | ForEach-Object { 
     $CurrentElement = $_
-    $ElementFunctionName = 
+    $ElementFunctionName = Get-ElementFunctionName -Element $CurrentElement
     $ElementFunctionNames.Add($CurrentElement, $ElementFunctionName )
 }
 
