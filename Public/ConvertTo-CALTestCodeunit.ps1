@@ -95,6 +95,11 @@ $ScenarioCache `
     $ElementFunctionNames.Add($CurrentElement, $ElementFunctionName )
 }
 
+$UniqueFunctionNames = 
+$ElementFunctionNames.Values `
+| Select-Object -Unique `
+| Sort-Object { $_ }
+
 Codeunit $CodeunitID $CodeunitName -SubType Test `
     -OnRun { $UniqueFeatureNames | ForEach-Object { "// $_ " } } `
     -SubObjects {
@@ -109,13 +114,22 @@ Codeunit $CodeunitID $CodeunitName -SubType Test `
             "// $($CurrentScenario.Feature)"
             "// $($CurrentScenario)"
 
-            if ($InitializeFunction) { 'Initialize();' }
+            if ($InitializeFunction) { 'Initialize();'; '' }
 
             [Given], [When], [Then], [Cleanup] `
             | ForEach-Object {
                 $CurrentType = $_
-                $CurrentScenario.Elements | Where-Object { $_ -is $CurrentType } | ForEach-Object { $_.GetType().Name } 
+                $CurrentScenario.Elements | Where-Object { $_ -is $CurrentType } | ForEach-Object { "// $_"; "$($ElementFunctionNames[$_])();"; '' } 
             }
+    }
+}
+
+$UniqueFunctionNames | ForEach-Object {
+    Procedure $_ -Local {
+        if (-not $DoNotAddErrorToHelperFunctions)
+        {
+            "Error('$_ not implemented.');"
+        }
     }
 }
 
@@ -141,20 +155,3 @@ if ($InitializeFunction)
 }
 }
 }
-
-Feature 'Foo' {
-    Scenario 1 'Baz' {
-        Given 'MyFirstGiven'
-        Given 'MySecondGiven'
-        When 'MyWhen'
-        Then 'MyFirstThen'
-        Then 'MySecondThen'
-    }
-
-    Scenario 2 'Bar' {
-        Given 'MyFirstGiven'
-        Given 'MyOtherGiven'
-        When 'MyOtherWhen'
-        Then 'MyFirstOtherThen'
-    }
-} | ConvertTo-CALTestCodeunit 50000 'My Test Codeunit' -InitializeFunction
