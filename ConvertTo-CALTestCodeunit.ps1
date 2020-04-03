@@ -1,3 +1,5 @@
+#requires -modules Atdd.TestScriptor, UncommonSense.CBreeze.Automation
+
 using namespace ATDD.TestScriptor
 
 function ConvertTo-CALTestCodeunit 
@@ -81,12 +83,15 @@ function Get-ElementFunctionName
     }
 }
 
+# Prepare banner
 $Now = Get-Date
 $Banner = $BannerFormat -f $Now.ToShortDateString(), $Now.ToShortTimeString(), [System.Environment]::UserName
+
+# Find unique feature names
 $UniqueFeatureNames = $ScenarioCache | ForEach-Object { $_.Feature.ToString() } | Select-Object -Unique
 
+# Map elements to their functions
 $ElementFunctionNames = @{ }
-
 $ScenarioCache `
 | Select-Object -ExpandProperty Elements `
 | ForEach-Object { 
@@ -95,11 +100,13 @@ $ScenarioCache `
     $ElementFunctionNames.Add($CurrentElement, $ElementFunctionName )
 }
 
+# Find unique function names
 $UniqueFunctionNames = 
 $ElementFunctionNames.Values `
 | Select-Object -Unique `
 | Sort-Object { $_ }
 
+# Build codeunit
 Codeunit $CodeunitID $CodeunitName -SubType Test `
     -OnRun { $UniqueFeatureNames | ForEach-Object { "// $_ " } } `
     -SubObjects {
