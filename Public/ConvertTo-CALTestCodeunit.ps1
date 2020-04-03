@@ -1,7 +1,5 @@
 using namespace ATDD.TestScriptor
 
-# FIXME: Make this a micro-module
-
 function ConvertTo-CALTestCodeunit 
 {
     param
@@ -126,7 +124,7 @@ if ($InitializeFunction)
     BooleanVariable Initialized
 
     Procedure Initialize -Local {
-        CodeunitVariable LibraryTestInitialize -SubType 99999 # FIXME
+        CodeunitVariable LibraryTestInitialize -SubType 132250
         'LibraryTextInitialize.OnTestInitialize(Codeunit::"{0}");' -f $CodeunitName
         ''
         'if Initialized then'
