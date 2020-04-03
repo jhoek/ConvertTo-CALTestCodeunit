@@ -1,3 +1,5 @@
+. ./ConvertTo-CALTestCodeunit.ps1
+
 Feature 'Foo' {
     Scenario 1 'Baz' {
         Given 'My First Given'
