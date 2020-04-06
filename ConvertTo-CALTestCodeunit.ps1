@@ -62,7 +62,7 @@ end
 
         $Name -split '\W' `
         | Where-Object { $_ } `
-        | ForEach-Object { $_ -replace '^(.)', { $_.Groups[1].Value.ToUpperInvariant() } }
+        | ForEach-Object { $_ -replace '^(.)', { $_.Groups[1].Value.ToUpperInvariant() } } `
         | Join-String 
 }
 
