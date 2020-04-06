@@ -2,7 +2,7 @@
 
 using namespace ATDD.TestScriptor
 
-function ConvertTo-CALTestCodeunit 
+function ConvertTo-CALTestCodeunit
 {
     param
     (
@@ -27,7 +27,7 @@ function ConvertTo-CALTestCodeunit
         [ValidateNotNullOrEmpty()]
         [string]$WhenFunctionName = '{0}',
 
-        [ValidateNotNullOrEmpty()]        
+        [ValidateNotNullOrEmpty()]
         [string]$ThenFunctionName = '{0}',
 
         [ValidateNotNull()]
@@ -60,13 +60,12 @@ end
             [string]$Name
         )
 
-        $Name -split '\W' `
+        ($Name -split '\W' `
         | Where-Object { $_ } `
-        | ForEach-Object { $_ -replace '^(.)', { $_.Groups[1].Value.ToUpperInvariant() } } `
-        | Join-String 
+        | ForEach-Object { $_ -replace '^(.)', { $_.Groups[1].Value.ToUpperInvariant() } }) -join ''
 }
 
-function Get-ElementFunctionName 
+function Get-ElementFunctionName
 {
     param
     (
@@ -94,14 +93,14 @@ $UniqueFeatureNames = $ScenarioCache | ForEach-Object { $_.Feature.ToString() } 
 $ElementFunctionNames = @{ }
 $ScenarioCache `
 | Select-Object -ExpandProperty Elements `
-| ForEach-Object { 
+| ForEach-Object {
     $CurrentElement = $_
     $ElementFunctionName = Get-ElementFunctionName -Element $CurrentElement
     $ElementFunctionNames.Add($CurrentElement, $ElementFunctionName )
 }
 
 # Find unique function names
-$UniqueFunctionNames = 
+$UniqueFunctionNames =
 $ElementFunctionNames.Values `
 | Select-Object -Unique `
 | Sort-Object { $_ }
@@ -126,7 +125,7 @@ Codeunit $CodeunitID $CodeunitName -SubType Test `
             [Given], [When], [Then], [Cleanup] `
             | ForEach-Object {
                 $CurrentType = $_
-                $CurrentScenario.Elements | Where-Object { $_ -is $CurrentType } | ForEach-Object { "// $_"; "$($ElementFunctionNames[$_])();"; '' } 
+                $CurrentScenario.Elements | Where-Object { $_ -is $CurrentType } | ForEach-Object { "// $_"; "$($ElementFunctionNames[$_])();"; '' }
             }
     }
 }
