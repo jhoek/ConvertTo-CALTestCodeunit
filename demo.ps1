@@ -2,8 +2,8 @@
 
 Feature 'Foo' {
     Scenario 1 'Baz' {
-        Given 'My First Given'
-        Given 'My Second Given'
+        Given 'My first given'
+        Given 'My second given'
         When 'My When'
         Then 'My First Then'
         Then 'My Second Then'
