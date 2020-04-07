@@ -1,6 +1,6 @@
 . ./ConvertTo-CALTestCodeunit.ps1
 
-Feature 'Foo' {
+$MyFeature = Feature 'Foo' {
     Scenario 1 'Baz' {
         Given 'My first given'
         Given 'My second given'
@@ -15,4 +15,8 @@ Feature 'Foo' {
         When 'My Other When'
         Then 'My First Other Then'
     }
-} | ConvertTo-CALTestCodeunit 50000 'My Test Codeunit' -InitializeFunction
+}
+
+$MyFeature `
+| ConvertTo-CALTestCodeunit 50000 'My Test Codeunit' -InitializeFunction `
+| Export-CBreezeApplication -Path ~\Desktop\MyTestCodeunit.txt
