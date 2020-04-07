@@ -62,8 +62,10 @@ end
 
         ($Name -split '\W' `
         | Where-Object { $_ } `
-        | ForEach-Object { $_ -replace '^(.)', { $_.Groups[1].Value.ToUpperInvariant() } }) -join ''
-}
+        | ForEach-Object {
+            [regex]::Replace($_, '^.', {param($firstChar)$firstChar.Value.ToUpperInvariant()})
+        }) -join ''
+    }
 
 function Get-ElementFunctionName
 {
