@@ -141,13 +141,13 @@ $UniqueFunctionNames | ForEach-Object {
 
 if ($InitializeFunction)
 {
-    BooleanVariable Initialized
+    BooleanVariable IsInitialized
 
     Procedure Initialize -Local {
         CodeunitVariable LibraryTestInitialize -SubType 132250
         'LibraryTextInitialize.OnTestInitialize(Codeunit::"{0}");' -f $CodeunitName
         ''
-        'if Initialized then'
+        'if IsInitialized then'
         '  exit;'
         ''
         'LibraryTestInitialize.OnBeforeTestSuiteInitialize(Codeunit::"{0}");' -f $CodeunitName
