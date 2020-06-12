@@ -157,7 +157,7 @@ function ConvertTo-CALTestCodeunit
                     'IsInitialized := true;'
                     'Commit;'
                     ''
-                    'LibraryTestInitialize.OnAfterTestSuiteinitialize(Codeunit::"{0}");' -f $CodeunitName
+                    'LibraryTestInitialize.OnAfterTestSuiteInitialize(Codeunit::"{0}");' -f $CodeunitName
                 }
             }
         }
